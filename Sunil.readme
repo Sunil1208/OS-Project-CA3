@@ -1,0 +1,162 @@
+/*Design a scheduler following non-preemptive scheduling approach to schedule the processes that arrives at different 
+  units and having burst time double the arrival time. Scheduler selects the process with largest burst time from the
+  queue for the execution. Process is not being preempted until it finishes its service time. Compute the average waiting
+  time and average turnaround time. What should be the average waiting time if processes are executed according to Shortest
+  Job First scheduling approach with the same attribute values. */
+#include<iostream>
+using namespace std;
+
+int main()
+
+{
+
+int i,n,p[20]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20},min,k=1,btime=0; //p- process;
+
+int burst[20],temp,j,arrival[20],wait[20],turn[20],ta=0,sum=0; //bt- burst time, at- arrival time; wt- wait time; tt- turnaround time;
+
+float waitavg=0,turnavg=0,turnsum=0,waitsum=0;	//wavg- wait time average; tavg- turnaround time average; tsum-sum of turnaround time; wsum- sum of wait time
+
+cout<<"######## OPERATING SYSTEM ########\n";
+cout<<"######## CA-3 ####################\n";
+cout<<"######## SUNIL KUMAR B-42 ########\n";
+cout<<"\nEnter the number of processes :";
+cin>>n;
+for(i=0;i<n;i++)
+	{
+		cout<<"\nEnter the arrival time of process number "<<i+1<<": ";
+		cin>>arrival[i];
+		burst[i]=2*arrival[i];
+	}
+
+for(i=0;i<n;i++) //Sorting the Arrival Time
+
+{
+
+for(j=0;j<n;j++)
+
+{
+
+if(arrival[i]<arrival[j])
+
+{
+
+temp=p[j];
+
+p[j]=p[i];
+
+p[i]=temp;
+
+temp=arrival[j];
+
+arrival[j]=arrival[i];
+
+arrival[i]=temp;
+
+temp=burst[j];
+
+burst[j]=burst[i];
+
+burst[i]=temp;
+
+}
+
+}
+
+}
+for(j=0;j<n;j++) //Burst time,Execution time and Arrival Time arranged
+
+{
+
+btime=btime+burst[j];
+
+min=burst[k];
+
+for(i=k;i<n;i++)
+
+{
+
+if (btime>=arrival[i] && burst[i]<min)
+
+{
+
+temp=p[k];
+
+p[k]=p[i];
+
+p[i]=temp;
+
+temp=arrival[k];
+
+arrival[k]=arrival[i];
+
+arrival[i]=temp;
+
+temp=burst[k];
+
+burst[k]=burst[i];
+
+burst[i]=temp;
+
+}
+
+}
+
+k++;
+
+}
+
+wait[0]=0;
+
+for(i=1;i<n;i++)
+
+{
+
+sum=sum+burst[i-1];
+
+wait[i]=sum-arrival[i];
+
+waitsum=waitsum+wait[i];
+
+}
+
+ 
+
+waitavg=(waitsum/n);
+
+for(i=0;i<n;i++)
+
+{
+
+ta=ta+burst[i];
+
+turn[i]=ta-arrival[i];
+
+turnsum=turnsum+turn[i];
+
+}
+
+ 
+
+turnavg=(turnsum/n);
+
+ 
+
+cout<<"\n____________________________________________________________";
+
+cout<<"\n\n___________________________RESULT___________________________ \n";
+
+cout<<"\nProcess\t Burst\t Arrival\t Waiting\t Turn-around";
+
+for(i=0;i<n;i++)
+
+{
+
+cout<<"\n "<<p[i]<<"\t "<<burst[i]<<"\t "<<arrival[i]<<"\t\t "<<wait[i]<<"\t\t "<<turn[i];
+}
+
+ 
+
+cout<<"\n\nAverage Waiting Time : "<<waitavg;
+cout<<"\nAverage Turnaround Times : "<<turnavg;
+return 0;
+}
